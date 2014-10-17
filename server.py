@@ -17,11 +17,11 @@ class serverThread(threading.Thread):
             data = self.conn.recv(1024)
             print data
             if (data):
-                for element in thread_list:
+                for element in self.thread_list:
                     element.conn.sendall(data)
                 if (data == "exit"):
-                    while (len(thread_list)>0):
-                        thread = thread_list.pop()
+                    while (len(self.thread_list)>0):
+                        thread = self.thread_list.pop()
                         thread.conn.close()
                     return
 
