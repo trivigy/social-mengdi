@@ -23,7 +23,7 @@ class serverThread(threading.Thread):
                     while (len(self.thread_list)>0):
                         thread = self.thread_list.pop()
                         thread.conn.close()
-                    return
+                        return
 
 def server_main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
