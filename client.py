@@ -5,7 +5,7 @@ class Main(cmd.Cmd):
     def preloop(self):
         self.prompt = "#-> "
         self.HOST = '127.0.0.1'
-        self.PORT = 50020
+        self.PORT = 50030
         
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.HOST, self.PORT))

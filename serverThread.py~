@@ -1,0 +1,15 @@
+import threading
+
+class serverThread(threading,Thread):
+    def __init__(self,conn,addr,thread_list):
+        threading.Thread.__init__(self)
+        self.conn = conn
+        self.addr = addr
+    def run(self):
+        while True:
+            data = self.conn.recv(1024)
+            if (data):
+                self.conn.sendall(data)
+                if (data == "exit"):
+                    self.conn.close()
+                    return
