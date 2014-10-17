@@ -1,5 +1,20 @@
 import socket
+import threading
 import cmd
+
+class Server(threading.Thread):
+    def __init__(self, prog):
+        threading.Thread.__init__(self)
+        self.prog = prog
+        
+    def run(self):
+        while True:
+            data = self.prog.socket.recv(1024)
+            if data:
+                print data
+                if data == "exit":
+                    self.prog.onecmd("exit")
+                    return
 
 class Main(cmd.Cmd):
     def preloop(self):
@@ -9,12 +24,11 @@ class Main(cmd.Cmd):
         
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.HOST, self.PORT))
+        
+        Server(self).start()
 
     def do_send(self, msg):
         self.socket.sendall(msg)
-        data = self.socket.recv(1024)
-        if data:
-            print data
         
         
     def do_exit(self, line):
@@ -28,17 +42,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         main.echo("")
         main.onecmd("exit")
+        
 
-# def main():
-#     
-#     
-#     
-#     totalsent = 0
-#     while totalsent < len(msg):
-#         sent = self.sock.send(msg[totalsent:])
-#         if sent == 0:
-#             raise RuntimeError("socket connection broken")
-#         totalsent = totalsent + sent
-# 
-# if __name__ == '__main__':
-#     main()
