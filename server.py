@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-
-=======
 import socket
 
 HOST = '127.0.0.1'
@@ -21,7 +17,5 @@ def server_main():
         if (data == "exit"):
             conn.close()
 
-#127.0.0.1
->>>>>>> origin/master
 if __name__ == '__main__':
     server_main()
