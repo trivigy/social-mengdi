@@ -11,7 +11,7 @@ class Client(threading.Thread):
         while True:
             data = self.prog.socket.recv(1024)
             if data:
-                self.prog.onecmd("print" + data)
+                self.prog.onecmd("print " + data)
                 if data == "exit":
                     self.prog.onecmd("exit")
                     return 0
