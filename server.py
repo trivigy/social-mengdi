@@ -4,6 +4,7 @@ import threading
 HOST = '127.0.0.1'
 PORT = 50030
 
+bool end_server = False
 class serverThread(threading.Thread):
     def __init__(self,conn,addr,thread_list):
         threading.Thread.__init__(self)
@@ -14,16 +15,15 @@ class serverThread(threading.Thread):
 
     def run(self):
         while True:
+            print "here"
             data = self.conn.recv(1024)
             print data
             if (data):
                 for element in self.thread_list:
                     element.conn.sendall(data)
                 if (data == "exit"):
-                    while (len(self.thread_list)>0):
-                        thread = self.thread_list.pop()
-                        thread.conn.close()
-                        return
+                    end_server = True
+                    return
 
 def server_main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -36,6 +36,9 @@ def server_main():
         if (conn):
             thread = serverThread(conn,addr,thread_list)
             thread.start()
+        if (end_server):
+            return
+        
 
 if __name__ == '__main__':
     server_main()
