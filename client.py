@@ -11,10 +11,10 @@ class Client(threading.Thread):
         while True:
             data = self.prog.socket.recv(1024)
             if data:
-                print data
+                self.prog.onecmd("print" + data)
                 if data == "exit":
                     self.prog.onecmd("exit")
-                    return
+                    return 0
 
 class Main(cmd.Cmd):
     def preloop(self):
@@ -30,6 +30,8 @@ class Main(cmd.Cmd):
     def do_send(self, msg):
         self.socket.sendall(msg)
         
+    def do_print(self, msg):
+        print msg
         
     def do_exit(self, line):
         self.socket.close()
