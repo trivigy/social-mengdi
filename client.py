@@ -2,7 +2,7 @@ import socket
 import threading
 import cmd
 
-class Server(threading.Thread):
+class Client(threading.Thread):
     def __init__(self, prog):
         threading.Thread.__init__(self)
         self.prog = prog
@@ -25,7 +25,7 @@ class Main(cmd.Cmd):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.HOST, self.PORT))
         
-        Server(self).start()
+        Client(self).start()
 
     def do_send(self, msg):
         self.socket.sendall(msg)
