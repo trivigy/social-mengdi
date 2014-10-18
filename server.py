@@ -4,7 +4,7 @@ import threading
 HOST = '127.0.0.1'
 PORT = 50030
 
-bool end_server = False
+end_server = False
 class serverThread(threading.Thread):
     def __init__(self,conn,addr,thread_list):
         threading.Thread.__init__(self)
@@ -23,7 +23,8 @@ class serverThread(threading.Thread):
                     element.conn.sendall(data)
                 if (data == "exit"):
                     end_server = True
-                    return
+                    print "inside here"
+                    break
 
 def server_main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -37,6 +38,7 @@ def server_main():
             thread = serverThread(conn,addr,thread_list)
             thread.start()
         if (end_server):
+            s.close()
             return
         
 
