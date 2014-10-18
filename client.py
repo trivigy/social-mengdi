@@ -1,20 +1,21 @@
 import socket
 import threading
 import cmd
+import signal
 
 class Client(threading.Thread):
     def __init__(self, prog):
         threading.Thread.__init__(self)
         self.prog = prog
+        self.kill = False
 
     def run(self):
-        while True:
+        while not self.kill:
             data = self.prog.socket.recv(1024)
             if data:
                 self.prog.onecmd("print " + data)
                 if data == "exit":
-                    self.prog.onecmd("exit")
-                    return 0
+                    self.kill = True
 
 class Main(cmd.Cmd):
     def preloop(self):
@@ -31,10 +32,10 @@ class Main(cmd.Cmd):
         self.socket.sendall(msg)
 
     def do_print(self, msg):
+        print ""
         print msg
 
     def do_exit(self, line):
-        self.socket.close()
         return True
 
     def emptyline(self):
@@ -44,8 +45,7 @@ if __name__ == '__main__':
     main = Main()
     try:
         main.cmdloop()
-    except KeyboardInterrupt:
-        main.echo("")
-        main.onecmd("exit")
+    except:
+        pass
 
 

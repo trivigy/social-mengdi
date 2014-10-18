@@ -16,15 +16,21 @@ class serverThread(threading.Thread):
 
     def run(self):
         while not self.kill:
-            data = self.conn.recv(1024)
-            print data
-            if (data):
-                for element in self.thread_list:
-                    element.conn.sendall(data)
-                if (data == "exit"):
+            try:
+                data = None
+                data = self.conn.recv(1024)
+                print data
+                if (data):
                     for element in self.thread_list:
-                        element.kill = True
-                    self.s_server.shutdown(socket.SHUT_RDWR)
+                        element.conn.sendall(data)
+                    if (data == "exit"):
+                        for element in self.thread_list:
+                            element.kill = True
+                            element.conn.shutdown(socket.SHUT_RDWR)
+                        self.kill = True
+                        self.s_server.shutdown(socket.SHUT_RDWR)
+            except:
+                pass
 
 def server_main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -33,7 +39,6 @@ def server_main():
     thread_list = []
     
     while True:
-        print "HAZA"
         try:
             conn, addr = s.accept()
             print addr
